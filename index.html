@@ -3,37 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grade Calculator | Kanishk Raj</title>
+    <title>Grade Calculator</title>
     <style>
         /* Basic styling for the calculator */
         body {
             font-family: Arial, sans-serif;
             padding: 20px;
-            text-align:center;
-            align-items:center;
-            justify-content:center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .calculator {
+            max-width: 400px;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007bff;
         }
         label {
             display: block;
             margin-bottom: 10px;
+            text-align: center;
         }
         input[type="text"] {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             box-sizing: border-box;
             margin-bottom: 10px;
-            border: 3px solid #333;
-            border-radius:3px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
-            border-radius:5px;
-            font-weight:bold;
-            
+            border-radius: 4px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #0056b3;
@@ -41,25 +63,53 @@
         .result {
             margin-top: 20px;
             font-weight: bold;
+            text-align: center;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <h2>Grade Calculator</h2>
-    <label for="grades">Enter grades separated by commas:</label>
-  <br>
-    <input type="text" id="grades" placeholder="e.g., 80, 75, 90">
-  <br><br>
-    <button onclick="calculateGrade()">Calculate Final Grade</button>
-    <div class="result" id="result"></div>
+    <div class="calculator">
+        <h2>Grade Calculator</h2>
+        <label class="lbl" for="grades">Enter grades separated by commas:</label>
+        <input type="text" id="grades" placeholder="e.g., 80, 75, 90">
+      <br>
+        <div class="button-container">
+          <br>
+            <button onclick="calculateGrade()">Calculate</button>
+            <button onclick="clearInputs()">Clear</button>
+        </div><br>
+        <div class="result" id="result"></div>
+        <div class="error" id="error"></div>
+    </div>
 
     <script>
         function calculateGrade() {
+            // Clear previous errors
+            document.getElementById('error').textContent = '';
+
             // Get input value
-            let gradesInput = document.getElementById('grades').value;
+            let gradesInput = document.getElementById('grades').value.trim();
+            
+            // Validate input
+            if (gradesInput === '') {
+                document.getElementById('error').textContent = 'Please enter grades.';
+                return;
+            }
             
             // Split grades by comma and convert to array
             let gradesArray = gradesInput.split(',').map(Number);
+            
+            // Validate grades are numbers
+            if (gradesArray.some(isNaN)) {
+                document.getElementById('error').textContent = 'Invalid input. Please enter valid numbers separated by commas.';
+                return;
+            }
             
             // Calculate average grade
             let sum = gradesArray.reduce((acc, curr) => acc + curr, 0);
@@ -70,7 +120,7 @@
             
             // Display result
             let resultElement = document.getElementById('result');
-            resultElement.innerHTML = `Your Final Grade is: ${average.toFixed(2)}% (${textGrade})`;
+            resultElement.innerHTML = `Your final grade is: ${average.toFixed(2)} (${textGrade})`;
         }
         
         function calculateTextGrade(percentage) {
@@ -88,6 +138,13 @@
             } else {
                 return 'F'; // Fail
             }
+        }
+        
+        function clearInputs() {
+            // Clear input and result
+            document.getElementById('grades').value = '';
+            document.getElementById('result').textContent = '';
+            document.getElementById('error').textContent = '';
         }
     </script>
 </body>
