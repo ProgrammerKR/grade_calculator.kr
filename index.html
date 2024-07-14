@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Calculator</title>
+    <style>
+        /* Basic styling for the calculator */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align:center;
+            align-items:center;
+            justify-content:center;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            border: 3px solid #333;
+            border-radius:3px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius:5px;
+            font-weight:bold;
+            
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>Grade Calculator</h2>
+    <label for="grades">Enter grades separated by commas:</label>
+  <br>
+    <input type="text" id="grades" placeholder="e.g., 80, 75, 90">
+  <br><br>
+    <button onclick="calculateGrade()">Calculate Final Grade</button>
+    <div class="result" id="result"></div>
+
+    <script>
+        function calculateGrade() {
+            // Get input value
+            let gradesInput = document.getElementById('grades').value;
+            
+            // Split grades by comma and convert to array
+            let gradesArray = gradesInput.split(',').map(Number);
+            
+            // Calculate average grade
+            let sum = gradesArray.reduce((acc, curr) => acc + curr, 0);
+            let average = sum / gradesArray.length;
+            
+            // Calculate text grade based on standard grading scale
+            let textGrade = calculateTextGrade(average);
+            
+            // Display result
+            let resultElement = document.getElementById('result');
+            resultElement.innerHTML = `Your Final Grade is: ${average.toFixed(2)} (${textGrade})`;
+        }
+        
+        function calculateTextGrade(percentage) {
+            // Define grading scale
+            if (percentage >= 90) {
+                return 'O'; // Outstanding
+            } else if (percentage >= 80) {
+                return 'A'; // Excellent
+            } else if (percentage >= 70) {
+                return 'B'; // Good
+            } else if (percentage >= 60) {
+                return 'C'; // Average
+            } else if (percentage >= 50) {
+                return 'D'; // Pass
+            } else {
+                return 'F'; // Fail
+            }
+        }
+    </script>
+</body>
+</html>
